@@ -53,7 +53,9 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
     'django.contrib.sites',
 	'account',
-    'partsmanagement'
+    'partsmanagement',
+    'bootstrap3',
+    'jquery'
 )
 
 MIDDLEWARE_CLASSES = (

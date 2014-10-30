@@ -2,17 +2,20 @@
 
 {% load url from future %}
 {% load i18n %}
-
+{% load bootstrap3 %}
 {% block head_title %}{% trans "Log in" %}{% endblock %}
 
 {% block content %}
-<p> {% trans "Please login with an existing account:" %}</p>
-<form method="POST" action="{% url "account_login" %}" autocapitalize="off">
+<h2> {% trans "Please login with an existing account:" %}</h2>
+<form method="POST" action="{% url "account_login" %}" autocapitalize="off" class="form">
 	{% csrf_token %}
-	<table>
-		{{ form.as_table }}
-	</table>
-	<button type="submit">{% trans "Log in" %}</button>
+    {% bootstrap_field form.username %}
+    {% bootstrap_field form.password %}
+    {% buttons  layout='horizontal' %}
+      <button type="submit" class="btn btn-primary">
+      {% bootstrap_icon "star" %} Login
+      </button>
+    {% endbuttons %}
 </form>
 
 <p><a href="{% url "account_password_reset" %}">{% trans "Forgot your password?" %}</a></p>

@@ -1,4 +1,8 @@
-Django
-argparse
-wsgiref
-django-user-accounts
+Django==1.7.1
+argparse==1.2.1
+django-appconf==0.6
+django-bootstrap3==4.11.0
+django-jquery==1.9.1
+django-user-accounts==1.0
+pytz==2014.7
+six==1.8.0
