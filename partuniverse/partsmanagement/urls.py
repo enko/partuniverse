@@ -6,12 +6,26 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 
 
-from .views import PartsList, PartsAddView
+from .views import *
 
 urlpatterns = patterns('',
+	# Some general url pattern
 	url(r'^list/', PartsList.as_view(), name='partslist'),
 	url(r'^add/', login_required(
-			PartsAddView.as_view(template_name="pmgmt/add.html",
-								 success_url='/')),
+			PartsAddView.as_view()),
 			name='part_add'),
+	# item specific ones
+	url(r'^(?P<pk>[\w]+)/$', PartDetailView.as_view(),
+			name='part_detail'),
+	url(r'^(?P<pk>[\w]+)/delete/$', login_required(
+			PartDeleteView.as_view()),
+			name='part_delete'),
+	url(r'^(?P<pk>[\w]+)/update/$', login_required(
+			PartUpdateView.as_view()),
+			name='part_update'),
+	# Transactions
+	url(r'^transaction/list', TransactionListView.as_view(), name='transaction_list'),
+	url(r'^transaction/new$', login_required(TransactionAddView.as_view()),
+			name='transaction_new'),
+
 )
