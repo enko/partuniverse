@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
+
 class StorageType(models.Model):
 	""" Defining a general typ of storage """
 
@@ -11,6 +12,8 @@ class StorageType(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	class Meta:
+		verbose_name = _("Storage Type")
 
 class Unit(models.Model):
 	""" Defining units used in context of partuniverse.
@@ -19,6 +22,10 @@ class Unit(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
+	class Meta:
+		verbose_name = _("Unit")
+
 
 class StoragePlace(models.Model):
 	""" Representing the place inside the storage """
@@ -29,6 +36,9 @@ class StoragePlace(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	class Meta:
+		verbose_name = _("Storage Place")
+
 
 class Manufacturer(models.Model):
 	""" Manufacturer for a particular item """
@@ -38,6 +48,9 @@ class Manufacturer(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	class Meta:
+		verbose_name = _("Manufacturer")
+
 
 class Distributor(models.Model):
 	""" A distributor which is selling a particular part """
@@ -46,6 +59,9 @@ class Distributor(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
+	class Meta:
+		verbose_name = _("Distributor")
 
 class Category(models.Model):
 	""" Representing a category a part might contains to.
@@ -62,7 +78,8 @@ class Category(models.Model):
 			return tmp
 
 	class Meta:
-		verbose_name_plural = "Categories"
+		verbose_name = _("Category")
+		verbose_name_plural = _("Categories")
 
 
 class Part(models.Model):
@@ -94,6 +111,10 @@ class Part(models.Model):
 	def get_fields(self):
 		return [(field.name, field.value_to_string(self)) for field in Part._meta.fields]
 
+	class Meta:
+		verbose_name = _("Part")
+		verbose_name_plural = _("Parts")
+
 class Transaction(models.Model):
 	""" The transaction really taking place for the part """
 	subject = models.CharField(max_length=100)
@@ -110,7 +131,19 @@ class Transaction(models.Model):
 		null=True,
 		max_length=200)
 
+	def save(self, *args, **kwargs):
+		try:
+			tmp_part = Part.objects.get(name = self.part.name)
+			tmp_part.on_stock = tmp_part.on_stock + self.amount
+			tmp_part.save()
+		except:
+			pass
+		super(Transaction, self).save(*args, **kwargs)
+
 	def __unicode__(self):
 		tmp = self.subject + " " + str(self.part) + " " + str(self.date)
 		return unicode(tmp)
 
+	class Meta:
+		verbose_name = _("Transaction")
+		verbose_name_plural = _("Transactions")
