@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load url from future %}
+{% load bootstrap3 %}
+
+{% block head_title %}{% trans "Add a new part" %}{% endblock %}
+
 {% block content %}
-<form method="post" class="form-horizontal" >
-{% csrf_token %}
-<table>
-    {{form.as_p}}
-</table>
-<input type="submit" value="Submit">
+<form method="POST" autocapitalize="off" class="form">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% buttons  layout='horizontal' %}
+      <button type="submit" class="btn btn-primary">
+      {% bootstrap_icon "star" %} {% trans "add" %}
+      </button>
+    {% endbuttons %}
 </form>
 {% endblock %}
